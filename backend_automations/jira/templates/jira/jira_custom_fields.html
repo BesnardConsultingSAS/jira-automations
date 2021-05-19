@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Jira Automation</title>
+</head>
+<body>
+<a href="{% url "logout" %}">Log out</a>
+<h1>Jira Field - Status Mapping</h1>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    {{ form.errors }}
+    {% for field in form %}
+        <div class="fieldWrapper" style="margin-top: 20px">
+            {{ field.errors }}
+            {{ field.label_tag }} {{ field }}
+            {% if field.help_text %}
+                <p class="help">{{ field.help_text|safe }}</p>
+            {% endif %}
+        </div>
+    {% endfor %}
+    <input type="submit" value="Submit" style="margin-top: 20px; padding: 10px 20px;">
+</form>
+
+<form action="{% url 'update-jira-issue' %}" method="post">
+    {% csrf_token %}
+    <input type="submit" value="Update Jira Issues" style="margin-top: 20px; padding: 10px 20px;">
+</form>
+</body>
+</html>

@@ -1,0 +1,46 @@
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  ci:
+    services:
+      postgres:
+        image: postgres:12.6
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: github_actions
+        ports:
+        - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    env:
+      JIRA_TOKEN: "x54n-$laa+3is#2g46d0pph^)kgjw955n0omyn9s#m+3:7zy:x"
+      JIRA_USERNAME: "test@example.com"
+      JIRA_BOARD: "EXPROJ"
+      JIRA_DOMAIN: "besnard-consulting.atlassian.net"
+      DEBUG: on
+      DATABASE_URL: "psql://postgres:postgres@localhost:5432/github_actions"
+      SECRET_KEY: "13m%uj60m1wrn8nj596gk%:$iiw4uj4xo)&&:)b!7&a&i*9a_"
+      ALLOWED_HOSTS: 127.0.0.1,localhost
+    name: Run Code Quality tools
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend_automations
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: psycopg2 prerequisites
+        run: sudo apt-get install libpq-dev
+      - run: python -m pip install poetry
+      - run: poetry install
+      - run: bash ci_script.sh

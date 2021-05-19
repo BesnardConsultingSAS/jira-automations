@@ -1,11 +1,12 @@
 from unittest.mock import patch, MagicMock
 
 import pytest
+from django.test.client import Client
 from django.contrib.auth.models import User, Permission
 
 from accounts.tests.factories.user_factory import UserFactory
 from jira.jira_client import CustomField, Status
-from jira.models import JiraIssue, JiraMapping
+from jira.models import JiraIssue
 from jira.tests.factories.jira_mapping_factory import JiraMappingFactory
 from jira.tests.get_all_jira_issues_mock import mocked_jira_issues
 
@@ -22,7 +23,7 @@ from jira.tests.get_all_jira_issues_mock import mocked_jira_issues
 )
 @pytest.mark.django_db
 class TestJiraCustomFieldsView:
-    def test_get_jira_custom_fields_view(self, client) -> None:
+    def test_get_jira_custom_fields_view(self, client: Client) -> None:
         user: User = UserFactory()
         user.user_permissions.add(Permission.objects.get(codename="view_jiramapping"))
         client.force_login(user)
@@ -41,7 +42,10 @@ class TestJiraCustomFieldsView:
 )
 @pytest.mark.django_db
 class TestUpdateJiraIssueView:
-    def test_update_jira_issue_view(self, client) -> None:
+    def test_update_jira_issue_view(
+        self,
+        client: Client,
+    ) -> None:
         jira_mapping = JiraMappingFactory(
             selected_field_id="customfield_10074", selected_status_id=10065
         )
@@ -50,15 +54,15 @@ class TestUpdateJiraIssueView:
 
         with patch(
             "jira.jira_client.update_selected_field",
-        ) as mocked_update_selected_field:
+        ) as patched_update_selected_field:
             response = client.post("/jira/update-jira-issue/")
 
         assert response.status_code == 302
         assert response.headers["Location"] == "/jira/custom-fields-mapping/"
         assert JiraIssue.objects.count() == len(mocked_jira_issues)
 
-        assert mocked_update_selected_field.call_count == 1
-        assert mocked_update_selected_field.call_args_list[0][0] == (
+        assert patched_update_selected_field.call_count == 1
+        assert patched_update_selected_field.call_args_list[0][0] == (
             jira_mapping,
             [JiraIssue.objects.get(key="EXPROJ-4")],
         )

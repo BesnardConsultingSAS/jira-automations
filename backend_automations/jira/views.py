@@ -8,7 +8,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 
 from jira.forms import JiraCustomFieldsMappingForm
-from jira.jira_client import get_all_jira_issues, update_selected_field
+from jira import jira_client
 from jira.models import JiraMapping, JiraIssue
 
 
@@ -45,7 +45,7 @@ class JiraCustomFieldsMappingView(View):
 
 def refresh_jira_issues(jira_mapping_instance: JiraMapping) -> QuerySet[JiraIssue]:
     JiraIssue.objects.all().delete()
-    jira_issues = get_all_jira_issues()
+    jira_issues = jira_client.get_all_jira_issues()
     return JiraIssue.objects.bulk_create(
         [
             JiraIssue(
@@ -56,7 +56,7 @@ def refresh_jira_issues(jira_mapping_instance: JiraMapping) -> QuerySet[JiraIssu
                 ],
             )
             for jira_issue in jira_issues
-        ]
+        ]  # type: ignore
     )
 
 
@@ -73,7 +73,9 @@ def update_jira_issues() -> List[JiraIssue]:
             selected_field_value__isnull=True,
         )
 
-        update_selected_field(jira_mapping_instance, list(jira_issues_to_update))
+        jira_client.update_selected_field(
+            jira_mapping_instance, list(jira_issues_to_update)
+        )
         return list(jira_issues_to_update)
     return []
 

@@ -9,36 +9,36 @@ from jira.jira_client import (
 )
 
 
-# @pytest.mark.skip(
-#     "Calls the Jira API. Only uncommented for local development purposes."
-# )
 from jira.models import JiraIssue
 from jira.tests.factories.jira_issue_factory import JiraIssueFactory
 from jira.tests.factories.jira_mapping_factory import JiraMappingFactory
 
 
-def test_get_all_jira_issues():
+@pytest.mark.skip(
+    "Calls the Jira API. Only uncommented for local development purposes."
+)
+def test_get_all_jira_issues() -> None:
     assert get_all_jira_issues() == []
 
 
 @pytest.mark.skip(
     "Calls the Jira API. Only uncommented for local development purposes."
 )
-def test_get_all_jira_custom_fields():
+def test_get_all_jira_custom_fields() -> None:
     assert get_all_jira_custom_fields() == []
 
 
 @pytest.mark.skip(
     "Calls the Jira API. Only uncommented for local development purposes."
 )
-def test_get_jira_project_id():
+def test_get_jira_project_id() -> None:
     assert get_jira_project_id() == 1
 
 
 @pytest.mark.skip(
     "Calls the Jira API. Only uncommented for local development purposes."
 )
-def test_get_statuses():
+def test_get_statuses() -> None:
     assert get_statuses() == []
 
 
@@ -46,7 +46,7 @@ def test_get_statuses():
     "Calls the Jira API. Only uncommented for local development purposes."
 )
 @pytest.mark.django_db
-def test_update_selected_field():
+def test_update_selected_field() -> None:
     jira_mapping = JiraMappingFactory(
         selected_field_id="customfield_10074", selected_status_id=10065
     )

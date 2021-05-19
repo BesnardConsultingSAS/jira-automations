@@ -1,3 +1,5 @@
+from typing import Any
+
 from django import forms
 
 from jira.jira_client import (
@@ -16,9 +18,9 @@ class JiraCustomFieldsMappingForm(forms.Form):
     def __init__(
         self,
         jira_mapping_instance: JiraMapping,
-        *args,
-        **kwargs,
-    ):
+        *args: Any,
+        **kwargs: dict,
+    ) -> None:
         self.jira_mapping_instance = jira_mapping_instance
         self.available_statuses = get_statuses()
         self.available_custom_fields = get_all_jira_custom_fields()
@@ -36,7 +38,8 @@ class JiraCustomFieldsMappingForm(forms.Form):
             for custom_field in self.available_custom_fields
         ]
 
-    def save(self):
+    def save(self) -> JiraMapping:
         self.jira_mapping_instance.selected_status_id = self.cleaned_data["status"]
         self.jira_mapping_instance.selected_field_id = self.cleaned_data["custom_field"]
         self.jira_mapping_instance.save()
+        return self.jira_mapping_instance

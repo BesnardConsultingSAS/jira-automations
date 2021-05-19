@@ -19,7 +19,7 @@ def get_all_jira_issues() -> list:
             {
                 "jql": f"project = {settings.JIRA_BOARD} ORDER BY created DESC",
                 "startAt": start_at,
-            },
+            },  # type: ignore
             auth=HTTPBasicAuth(settings.JIRA_USERNAME, settings.JIRA_TOKEN),
         )
         assert response.status_code == 200, response.json()

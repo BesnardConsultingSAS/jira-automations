@@ -9,7 +9,7 @@ def test_create_user() -> None:
 
     users = User.objects.all()
     assert users.count() == 1
-    user = users.first()
+    user: User = users.first()
     assert set(user.get_all_permissions()) == {
         "jira.view_jiramapping",
         "jira.delete_jiramapping",

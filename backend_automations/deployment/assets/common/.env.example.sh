@@ -1,0 +1,15 @@
+export username=besnardconsulting
+export app_user_name=johnny
+export ip_address='103.222.43.220'
+export ssh_file='~/.ssh/id_rsa'
+export postgres_username='besnardconsulting'
+export postgres_password='my_password360@'
+export postgres_db_name='test_db'
+export email_address='contact@besnard-consulting.com'
+export github_repo_ssh='git@github.com:BesnardConsultingSAS/example_repo.git'
+export django_app_name='backend_automations'
+export backend_folder_app_name='backend_automations'
+export app_folder_name='jira-automations'
+export number_of_workers='1'
+export domain_name_1='besnard-consulting.com'
+export domain_name_2='www.besnard-consulting.com'

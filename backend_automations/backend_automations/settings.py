@@ -80,6 +80,33 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "backend_automations.wsgi.application"
 
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "[{levelname}] {asctime} - {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "local_file": {
+            "level": "WARNING",
+            "class": "logging.handlers.RotatingFileHandler",
+            "maxBytes": 1048576,
+            "backupCount": 3,
+            "filename": BASE_DIR / "backend_automations.log",
+            "formatter": "verbose",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["local_file"],
+            "level": "WARNING",
+            "propagate": True,
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases

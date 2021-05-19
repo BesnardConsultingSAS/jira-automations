@@ -5,7 +5,7 @@ from django.core.management import call_command
 
 @pytest.mark.django_db
 def test_create_user() -> None:
-    call_command("create_user", "John", "my-password")
+    call_command("create_user", "John", "--password", "my-password")
 
     users = User.objects.all()
     assert users.count() == 1

@@ -9,7 +9,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser: CommandParser) -> None:
         parser.add_argument("username", type=str)
-        parser.add_argument("password", type=str, default=None)
+        parser.add_argument("--password", type=str, default=None)
 
     def handle(self, *args: Any, **options: Any) -> None:
         username = options["username"]

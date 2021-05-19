@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.core.management.base import BaseCommand
 
 from jira.views import update_jira_issues
@@ -6,7 +8,7 @@ from jira.views import update_jira_issues
 class Command(BaseCommand):
     help = "Update Jira Issue target field"
 
-    def handle(self, *args, **options):
+    def handle(self, *args: Any, **options: dict) -> None:
         updated_issues = update_jira_issues()
         if updated_issues:
             self.stdout.write(
@@ -15,4 +17,4 @@ class Command(BaseCommand):
                 )
             )
         else:
-            self.stdout.write(self.style.SUCCESS(f"No Jira issues updated."))
+            self.stdout.write(self.style.SUCCESS("No Jira issues updated."))

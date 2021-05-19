@@ -1,15 +1,17 @@
+from typing import Any
+
 from django.contrib.auth.models import User, Permission
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand, CommandError, CommandParser
 
 
 class Command(BaseCommand):
     help = "Creates a user and give the CRUD permissions"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: CommandParser) -> None:
         parser.add_argument("username", type=str)
         parser.add_argument("password", type=str, default=None)
 
-    def handle(self, *args, **options):
+    def handle(self, *args: Any, **options: Any) -> None:
         username = options["username"]
         password = options.get("password")
 

@@ -28,6 +28,8 @@ jobs:
       DATABASE_URL: "psql://postgres:postgres@localhost:5432/github_actions"
       SECRET_KEY: "13m%uj60m1wrn8nj596gk%:$iiw4uj4xo)&&:)b!7&a&i*9a_"
       ALLOWED_HOSTS: 127.0.0.1,localhost
+      SESSION_COOKIE_SECURE: off
+      CSRF_COOKIE_SECURE: off
     name: Run Code Quality tools
     runs-on: ubuntu-latest
     defaults:

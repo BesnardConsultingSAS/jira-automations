@@ -30,6 +30,8 @@ jobs:
       ALLOWED_HOSTS: 127.0.0.1,localhost
       SESSION_COOKIE_SECURE: off
       CSRF_COOKIE_SECURE: off
+      WEBHOOK_URLS_TO_TRIGGER: "http://example.com/1/,http://example.com/1/"
+
     name: Run Code Quality tools
     runs-on: ubuntu-latest
     defaults:

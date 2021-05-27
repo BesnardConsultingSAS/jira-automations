@@ -40,6 +40,10 @@ class TestJiraCustomFieldsView:
     "jira.jira_client.get_all_jira_issues",
     MagicMock(return_value=mocked_jira_issues),
 )
+@patch(
+    "jira.webhooks_client.trigger_webhooks",
+    MagicMock(),
+)
 @pytest.mark.django_db
 class TestUpdateJiraIssueView:
     def test_update_jira_issue_view(

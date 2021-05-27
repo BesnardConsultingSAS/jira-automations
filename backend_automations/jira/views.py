@@ -8,7 +8,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 
 from jira.forms import JiraCustomFieldsMappingForm
-from jira import jira_client
+from jira import jira_client, webhooks_client
 from jira.models import JiraMapping, JiraIssue
 
 
@@ -76,6 +76,8 @@ def update_jira_issues() -> List[JiraIssue]:
         jira_client.update_selected_field(
             jira_mapping_instance, list(jira_issues_to_update)
         )
+        for jira_issue_to_update in jira_issues_to_update:
+            webhooks_client.trigger_webhooks(jira_issue_to_update)
         return list(jira_issues_to_update)
     return []
 

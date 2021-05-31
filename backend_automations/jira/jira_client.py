@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Callable
+from typing import List, Generator
 
 import requests
 from django.conf import settings
@@ -37,37 +37,19 @@ class CustomField(BaseModel):
     name: str
 
 
-def get_filter_custom_fields_function(project_id: int) -> Callable[[dict], bool]:
-    def filter_function(field: dict) -> bool:
-        return (
-            field["id"].startswith("customfield_")
-            and "project" in field.get("scope", {})
-            and field["scope"]["project"]["id"] == project_id
-        )
-
-    return filter_function
-
-
-def get_all_jira_custom_fields() -> List[CustomField]:
-    project_id = get_jira_project_id()
-    filter_custom_fields_function = get_filter_custom_fields_function(project_id)
+def get_all_jira_custom_fields() -> Generator[CustomField, None, None]:
     response = requests.get(
-        f"https://{settings.JIRA_DOMAIN}/rest/api/2/field",
+        f"https://{settings.JIRA_DOMAIN}/rest/api/2/issue/createmeta?projectKeys={settings.JIRA_BOARD}&expand=projects.issuetypes.fields",
         auth=HTTPBasicAuth(settings.JIRA_USERNAME, settings.JIRA_TOKEN),
     )
     assert response.status_code == 200, response.json()
-    return parse_obj_as(
-        List[CustomField], list(filter(filter_custom_fields_function, response.json()))
-    )
+    issuetypes = response.json()["projects"][0]["issuetypes"]
 
-
-def get_jira_project_id() -> int:
-    response = requests.get(
-        f"https://{settings.JIRA_DOMAIN}/rest/api/2/project/{settings.JIRA_BOARD}",
-        auth=HTTPBasicAuth(settings.JIRA_USERNAME, settings.JIRA_TOKEN),
-    )
-    assert response.status_code == 200, response.json()
-    return response.json()["id"]
+    # Nested loop with if, we could parse it better but let's say it's fine for now
+    for issuetype in issuetypes:
+        for field_id, field in issuetype["fields"].items():
+            if field_id.startswith("customfield_"):
+                yield CustomField(id=field_id, name=field["name"])
 
 
 class Status(BaseModel):

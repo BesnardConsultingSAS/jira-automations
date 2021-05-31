@@ -70,11 +70,9 @@ sudo systemctl status gunicorn.socket
 
 file /run/gunicorn.sock
 
-sudo systemctl status gunicorn
 
 curl --unix-socket /run/gunicorn.sock localhost
 
-sudo systemctl status gunicorn
 
 
 # https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-ubuntu-20-04#configure-nginx-to-proxy-pass-to-gunicorn

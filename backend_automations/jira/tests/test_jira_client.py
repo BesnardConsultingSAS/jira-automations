@@ -3,7 +3,6 @@ import pytest
 from jira.jira_client import (
     get_all_jira_issues,
     get_all_jira_custom_fields,
-    get_jira_project_id,
     get_statuses,
     update_selected_field,
 )
@@ -25,14 +24,7 @@ def test_get_all_jira_issues() -> None:
     "Calls the Jira API. Only uncommented for local development purposes."
 )
 def test_get_all_jira_custom_fields() -> None:
-    assert get_all_jira_custom_fields() == []
-
-
-@pytest.mark.skip(
-    "Calls the Jira API. Only uncommented for local development purposes."
-)
-def test_get_jira_project_id() -> None:
-    assert get_jira_project_id() == 1
+    assert list(get_all_jira_custom_fields()) == []
 
 
 @pytest.mark.skip(

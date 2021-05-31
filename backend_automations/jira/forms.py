@@ -23,7 +23,7 @@ class JiraCustomFieldsMappingForm(forms.Form):
     ) -> None:
         self.jira_mapping_instance = jira_mapping_instance
         self.available_statuses = get_statuses()
-        self.available_custom_fields = get_all_jira_custom_fields()
+        self.available_custom_fields = list(get_all_jira_custom_fields())
 
         super().__init__(*args, **kwargs)
 
